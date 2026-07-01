@@ -1,0 +1,11 @@
+# ANSYS Fluent files
+*.cas
+*.dat
+*.cas.h5
+*.dat.h5
+
+# HDF5 files
+*.h5
+
+# Images
+*.png
