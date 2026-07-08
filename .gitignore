@@ -3,9 +3,14 @@
 *.dat
 *.cas.h5
 *.dat.h5
+*.pt
 
 # HDF5 files
 *.h5
+
+# Generated / output folders
+generated/
+contour_comparisons/
 
 # Images
 *.png
@@ -28,6 +33,7 @@ venv/
 .venv/
 env/
 ENV/
+myenv/
 
 # Environment variables
 .env
