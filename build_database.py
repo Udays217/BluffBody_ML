@@ -31,7 +31,7 @@ from pathlib import Path
 # ── Configuration ─────────────────────────────────────────────────────────────
 BASE_DIR = Path(
     r"C:\Users\udays\OneDrive - Shiv Nadar Institution of Eminence"
-    r"\2026 Summer Internships\IITM\10-cycle-data"
+    r"\2026 Summer Internships\IITM\10-cycle-validation-data"
 )
 OUT_DIR = Path(
     r"C:\Users\udays\OneDrive - Shiv Nadar Institution of Eminence"
@@ -47,9 +47,9 @@ SNAPSHOTS_PER_CYCLE = 16
 
 # folder, file prefix, first timestep number, step between files
 RE_CONFIG = {
-    100: dict(folder="10-cycle-data_100", prefix="FFF-1-", start=36815, step=37),
-     80: dict(folder="10-cycle-data_80",  prefix="FFF-2-", start=32400, step=40),
-     60: dict(folder="10-cycle-data_60",  prefix="FFF-1-", start=36000, step=45),
+    120: dict(folder="10-cyc-120", prefix="FFF-1-", start=15084, step=36),
+     90: dict(folder="10-cyc-90",  prefix="FFF-1-", start=18772, step=38),
+     70: dict(folder="10-cyc-70",  prefix="FFF-1-", start=21930, step=43),
 }
 
 # Fluent export column indices (0-based):

@@ -11,14 +11,20 @@ python plot_contours.py --re 100 --cycle 3 --snap 7 --var pressure
 # Vorticity instead:
 python plot_contours.py --re 100 --cycle 1 --snap 1 --var vorticity
 
-# Both variables side by side (3 Re x 2 vars — same layout as the overview image):
+# Both variables side by side (N Re x 2 vars — same layout as the overview image):
 python plot_contours.py --re all --cycle 1 --snap 1 --var both
 
-# Compare all three Re for one variable:
-python plot_contours.py --re all --cycle 5 --snap 8 --var vorticity
+# Validation Reynolds numbers (70, 90, 120):
+python plot_contours.py --re val --cycle 1 --snap 1 --var both
+
+# A single validation Re:
+python plot_contours.py --re 90 --cycle 5 --snap 8 --var vorticity
+
+# Everything (60, 70, 80, 90, 100, 120):
+python plot_contours.py --re all6 --cycle 1 --snap 1 --var both
 
 # Use a flat snapshot index (0-159) instead of cycle+snap:
-python plot_contours.py --re 80 --index 32 --var vorticity
+python plot_contours.py --re 120 --index 32 --var vorticity
 
 # Save to a specific filename:
 python plot_contours.py --re 100 --cycle 2 --snap 4 --var pressure --out my_plot.png
@@ -43,10 +49,20 @@ from pathlib import Path
 BASE = Path(__file__).resolve().parent
 
 DB = {
+    # training Reynolds numbers
     100: BASE / "database_Re100.h5",
      80: BASE / "database_Re80.h5",
      60: BASE / "database_Re60.h5",
+    # validation Reynolds numbers
+    120: BASE / "database_Re120.h5",
+     90: BASE / "database_Re90.h5",
+     70: BASE / "database_Re70.h5",
 }
+
+# named groups for the --re argument
+TRAIN_RE = [100, 80, 60]
+VAL_RE   = [120, 90, 70]
+ALL_RE   = [120, 100, 90, 80, 70, 60]   # sorted high → low
 
 CMAPS  = {"pressure": "RdBu_r", "vorticity": "inferno"}
 LABELS = {"pressure": "p",      "vorticity": "|ω|"}
@@ -113,7 +129,9 @@ def plot_single(ax, triang, values, var: str, title: str):
 def main():
     parser = argparse.ArgumentParser(description="Plot pressure / vorticity contours")
     parser.add_argument("--re",    type=str, default="100",
-                        help="Reynolds number: 60, 80, 100, or 'all'")
+                        help="Reynolds number: 60, 70, 80, 90, 100, 120, "
+                             "or a group: 'all' (60/80/100), 'val' (70/90/120), "
+                             "'all6' (everything)")
     parser.add_argument("--var",   type=str, default="pressure",
                         choices=["pressure", "vorticity", "both"],
                         help="Variable to plot. 'both' gives a side-by-side overview")
@@ -127,7 +145,15 @@ def main():
                         help="Output filename (default: auto-generated)")
     args = parser.parse_args()
 
-    re_list = [100, 80, 60] if args.re == "all" else [int(args.re)]
+    # ── Resolve which Reynolds numbers to plot ─────────────────────────────
+    if args.re == "all":
+        re_list = TRAIN_RE
+    elif args.re == "val":
+        re_list = VAL_RE
+    elif args.re == "all6":
+        re_list = ALL_RE
+    else:
+        re_list = [int(args.re)]
 
     # ── Resolve snapshot index ─────────────────────────────────────────────
     if args.index is not None:
